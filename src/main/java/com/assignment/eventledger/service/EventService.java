@@ -7,6 +7,9 @@ import com.assignment.eventledger.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -63,5 +66,16 @@ public class EventService {
                     }
                 })
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public Page<Event> getEventsByAccountWithPagination(
+            String accountId,
+            int page,
+            int size) {
+
+        return repository
+                .findByAccountIdOrderByEventTimestampAsc(
+                        accountId,
+                        PageRequest.of(page, size));
     }
 }

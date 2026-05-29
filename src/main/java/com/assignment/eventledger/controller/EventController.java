@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Page;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -37,6 +39,19 @@ public class EventController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedEvent);
+    }
+
+    @GetMapping("/events/paginated")
+    public ResponseEntity<Page<Event>> getPaginatedEvents(
+            @RequestParam String account,
+            @RequestParam int page,
+            @RequestParam int size) {
+
+        return ResponseEntity.ok(
+                service.getEventsByAccountWithPagination(
+                        account,
+                        page,
+                        size));
     }
 
     @GetMapping("/events/{id}")
